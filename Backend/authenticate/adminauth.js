@@ -7,13 +7,8 @@ const bodyParser=require("body-parser");
 const mailprefix=" Dear Admin ,\n";
 const mailsuffix="username :Admin-pradeep   \n password :earn money  is your credentials";
 
-const table='accounts';
 
-
-
-const db=require("../dbdata/data");
 const adminusername=process.env.ADMIN_USERNAME;
-const adminemail='pradeepsbitly@gmail.com';
 const adminpassword=process.env.ADMIN_PASSWORD;
 const secretkey=process.env.SECRET_KEY;
 
@@ -41,13 +36,13 @@ Router.post("/forgotpassword/sendpassword",async(req,res) =>{
                 host: "smtp.gmail.com",
                 port: 587,
                 auth: {
-                  user: 'pradeepdedsec@gmail.com',
-                  pass: 'cpkl oatl iqal mtqu',
+                  user: process.env.SERVER_EMAIL,
+                  pass: process.env.SERVER_PASSWORD,
               },
               });
               const mailOptions = {
-                from: 'pradeepdedsec@gmail.com',
-                to:  "pradeepsbitly@gmail.com",
+                from: process.env.SERVER_EMAIL,
+                to:  process.env.ADMIN_EMAIL,
                 subject: "COLLAB FINDER",
                 text: "Hello world ", 
                 html:

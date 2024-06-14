@@ -11,8 +11,6 @@ const mailsuffix=" is your otp for collab finder registration";
 
 const table='accounts';
 
-const adminemail='pradeepsbitly@gmail.com';
-const adminpassword='earn.money';
 const secretkey=process.env.SECRET_KEY;
 
 const db=require("../dbdata/data");
@@ -29,13 +27,13 @@ Router.post("/register/sendotp",async (req,res) =>{
         host: "smtp.gmail.com",
         port: 587,
         auth: {
-          user: 'pradeepdedsec@gmail.com',
-          pass: 'cpkl oatl iqal mtqu',
+          user: process.env.SERVER_EMAIL,
+          pass: process.env.SERVER_PASSWORD,
       },
       });
       const mailOptions = {
-        from: 'pradeepdedsec@gmail.com',
-        to:  "pradeepsbitly@gmail.com",
+        from: process.env.SERVER_EMAIL,
+        to:  process.env.ADMIN_EMAIL,
         subject: "COLLAB FINDER",
         text: "Hello world ", 
         html:
@@ -44,7 +42,6 @@ Router.post("/register/sendotp",async (req,res) =>{
 
       try{
             if(await req.exist===false){
-                const results=await req.user;
 
                 const {username,email}=await req.body;
                 async function setall(){
@@ -174,7 +171,7 @@ Router.post("/forgotpassword/sendotp",async(req,res) =>{
               });
               const mailOptions = {
                 from: 'pradeepdedsec@gmail.com',
-                to:  "pradeepsbitly@gmail.com",
+                to:  process.env.ADMIN_EMAIL,
                 subject: "COLLAB FINDER",
                 text: "Hello world ", 
                 html:
