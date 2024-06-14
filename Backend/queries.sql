@@ -1,6 +1,6 @@
-create database test;
+create database cbfinder;
 
-use test;
+use cbfinder;
 
 create table accounts(
 username varchar(255) PRIMARY KEY NOT NULL,
@@ -28,7 +28,7 @@ feedback text NOT NULL
 );
 
 create table message(
-id AUTO_INCREAMENT NOT NULL,
+id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 sender varchar(255) NOT NULL,
 receiver varchar(255) NOT NULL,
 chat text NOT NULL,
@@ -36,7 +36,7 @@ timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 create table otp_table(
-id (11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 username varchar(255) NOT NULL,
 otp text NOT NULL
 );
@@ -45,17 +45,17 @@ otp text NOT NULL
 create table posts(
 post_name text,
 username varchar(255) NOT NULL,
-timestamp timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 create table skills(
-id (11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 username varchar(255),
 skill varchar(255) 
 );
 
 create table teamrequest(
-id (11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 uploader varchar(255)  NOT NULL,
 skills text  NOT NULL,
 description text
