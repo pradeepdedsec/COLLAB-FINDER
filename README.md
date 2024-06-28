@@ -1,5 +1,15 @@
 # COLLAB-FINDER
 
+SOCIAL NETWORKING PLATFORM
+PROJECT COLLABORATION
+
+TECH STACK :HTML, CSS, JAVASCRIPT, REACT JS, EXPRESS JS, MYSQL
+
+
+Developed a social networking platform to connect individuals for collaborative learning projects.Implemented features such as personalized recommendations and a project showcase section.Designed a chatbox for communication between users.Managed user data, reviewed feedback submissions, and oversaw user messages as an administrator.Addressed the challenge of finding project collaborators by creating a dedicated platform tailored for project development purposes.
+
+# STEPS
+
 1.Install and open xampp server.
 
 2.Go to phpmyadmin.
