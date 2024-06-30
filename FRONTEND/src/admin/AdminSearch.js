@@ -3,6 +3,7 @@ import AdminNavBar from './AdminNavBar'
 import { useNavigate } from 'react-router-dom';
 import './AdminSearch.css';
 import AdminTitle from './AdminTitle';
+import { domain } from "../Hostdata";
 
 const AdminSearch = () => {
 
@@ -14,7 +15,7 @@ const AdminSearch = () => {
   useEffect(() => {
     const fetchData = async () => {
       try{
-        const response=await fetch("http://localhost:5000/admin/getallusers",{
+        const response=await fetch(domain+"/admin/getallusers",{
           method:"get",
           credentials:"include",
                   headers:{
@@ -59,7 +60,7 @@ const AdminSearch = () => {
 
     console.log("username :"+searchbar);
       try{
-        const response=await fetch("http://localhost:5000/admin/getuser/"+searchbar,{
+        const response=await fetch(domain+"/admin/getuser/"+searchbar,{
           method:"get",
           credentials:"include",
                   headers:{

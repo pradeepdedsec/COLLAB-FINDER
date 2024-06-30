@@ -3,6 +3,7 @@ import { redirect, useNavigate } from 'react-router-dom'
 import AdminNavBar from'./AdminNavBar'
 import './AdminHome.css'
 import AdminTitle from './AdminTitle';
+import { domain } from "../Hostdata";
 
 const AdminHome = () => {
 
@@ -14,7 +15,7 @@ const AdminHome = () => {
           try {
 
             
-            const response=await fetch("http://localhost:5000/admin/profile/getprofile",{
+            const response=await fetch(domain+"/admin/profile/getprofile",{
             method:"get",
             credentials:"include",
                     headers:{

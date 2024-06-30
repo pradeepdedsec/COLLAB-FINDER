@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './Adminforgotpass.css';
+import { domain } from "../Hostdata";
 
 const Adminforgotpass = () => {
 
@@ -18,7 +19,7 @@ const Adminforgotpass = () => {
         }
         else{
 
-            const response=await fetch("http://localhost:5000/auth/forgotpassword/verifyotp",{
+            const response=await fetch(domain+"/auth/forgotpassword/verifyotp",{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"
@@ -39,7 +40,7 @@ const Adminforgotpass = () => {
         else{
             console.log(`${username}`);
             
-            const response=await fetch("http://localhost:5000/auth/forgotpassword/sendotp",{
+            const response=await fetch(domain+"/auth/forgotpassword/sendotp",{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"

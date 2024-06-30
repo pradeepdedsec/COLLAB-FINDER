@@ -3,6 +3,7 @@ import { redirect, useNavigate } from 'react-router-dom';
 import AdminNavBar from './AdminNavBar';
 import './AdminDisplayMsgs.css';
 import AdminTitle from './AdminTitle';
+import { domain } from "../Hostdata";
 
 const AdminDisplayMsgs = () => {
 
@@ -19,7 +20,7 @@ const AdminDisplayMsgs = () => {
             try {
     
                 
-                const response=await fetch("http://localhost:5000/admin/profile/getprofile",{
+                const response=await fetch(domain+"/admin/profile/getprofile",{
                 method:"get",
                 credentials:"include",
                         headers:{
@@ -52,7 +53,7 @@ const AdminDisplayMsgs = () => {
 
             try {
 
-                const response=await fetch(`http://localhost:5000/admin/getchats/${userone}/${usertwo}`,{
+                const response=await fetch(`${domain}/admin/getchats/${userone}/${usertwo}`,{
                 method:"get",
                 credentials:"include",
                         headers:{

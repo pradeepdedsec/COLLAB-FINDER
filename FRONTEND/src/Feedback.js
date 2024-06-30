@@ -3,6 +3,7 @@ import { redirect, useNavigate } from 'react-router-dom'
 import NavBar from './NavBar'
 import './Feedback.css'
 import Title from './Title';
+import { domain } from "./Hostdata";
 
 const Feedback = () => {
 
@@ -17,7 +18,7 @@ const Feedback = () => {
         const fetchData = async () => {
           try {
 
-            const response=await fetch("http://localhost:5000/profile/getprofile",{
+            const response=await fetch(domain+"/profile/getprofile",{
             method:"get",
             credentials:"include",
                     headers:{
@@ -53,7 +54,7 @@ const Feedback = () => {
           return;
         }
         
-        const response=await fetch("http://localhost:5000/feedback/feed",{
+        const response=await fetch(domain+"/feedback/feed",{
           method:"post",
           credentials:"include",
                   headers:{

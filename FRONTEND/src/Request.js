@@ -3,6 +3,7 @@ import { redirect, useNavigate } from 'react-router-dom'
 import NavBar from './NavBar'
 import Title from './Title'
 import './Request.css'
+import { domain } from "./Hostdata";
 
 const Request = () => {
 
@@ -16,7 +17,7 @@ const Request = () => {
         const fetchData = async () => {
           try {
 
-            const response=await fetch("http://localhost:5000/profile/getprofile",{
+            const response=await fetch(domain+"/profile/getprofile",{
             method:"get",
             credentials:"include",
                     headers:{
@@ -45,7 +46,7 @@ const Request = () => {
                 return;
             }
 
-            const response=await fetch("http://localhost:5000/teamrequest/upload",{
+            const response=await fetch(domain+"/teamrequest/upload",{
             method:"post",
             credentials:"include",
                     headers:{

@@ -4,6 +4,7 @@ import NavBar from'./NavBar'
 import './profile.css'
 import Login from './Login';
 import Title from './Title';
+import { domain } from './Hostdata';
 
 const Home = () => {
 
@@ -15,7 +16,7 @@ const Home = () => {
         const fetchData = async () => {
           try {
             
-            const response=await fetch("http://localhost:5000/profile/getprofile",{
+            const response=await fetch(domain+"/profile/getprofile",{
             method:"get",
             credentials:"include",
                     headers:{

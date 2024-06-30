@@ -3,6 +3,7 @@ import NavBar from './NavBar'
 import { useNavigate } from 'react-router-dom';
 import './Recommendation.css';
 import Title from './Title';
+import { domain } from "./Hostdata";
 
 const Recommendation = () => {
 
@@ -23,7 +24,7 @@ const Recommendation = () => {
   async function Recommendskills(){
 
       try{
-        const response=await fetch("http://localhost:5000/teamrequest/filter",{
+        const response=await fetch(domain+"/teamrequest/filter",{
           method:"get",
           credentials:"include",
                   headers:{
@@ -47,7 +48,7 @@ const Recommendation = () => {
         return;
     console.log("skills :"+searchbar);
       try{
-        const response=await fetch("http://localhost:5000/profile/getprofiles",{
+        const response=await fetch(domain+"/profile/getprofiles",{
           method:"get",
           credentials:"include",
                   headers:{

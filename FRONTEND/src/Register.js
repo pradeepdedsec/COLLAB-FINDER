@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css'
+import { domain } from "./Hostdata";
 
 const Register = () => {
 
@@ -24,7 +25,7 @@ const Register = () => {
         else{
             console.log(`${username} ${name} ${email}`);
 
-            const response=await fetch("http://localhost:5000/auth/register/verifyotp",{
+            const response=await fetch(domain+"/auth/register/verifyotp",{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"
@@ -45,7 +46,7 @@ const Register = () => {
         else{
             console.log(`${username} ${name} ${email}`);
             
-            const response=await fetch("http://localhost:5000/auth/register/sendotp",{
+            const response=await fetch(domain+"/auth/register/sendotp",{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"

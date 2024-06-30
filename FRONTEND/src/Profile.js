@@ -7,6 +7,7 @@ import axios from 'axios';
 import Postdelete from './Overlay/Postdel';
 import LogoutOverlay from './Overlay/LogoutOverlay';
 import Cookies from 'js-cookie';
+import { domain } from './Hostdata';
 
 const Profile = () => {
 
@@ -39,12 +40,12 @@ const Profile = () => {
 
       const getposts= async (uname)=>{
 
-            axios.get(`http://localhost:5000/posts/get/${uname}`, { withCredentials: true })
+            axios.get(`${domain}/posts/get/${uname}`, { withCredentials: true })
             .then(async response => {
               const temposts = response.data;
               console.log("posts:", JSON.stringify(temposts));
 
-              axios.post('http://localhost:5000/posts/getposts', { posts: temposts }, { withCredentials: true })
+              axios.post(domain+'/posts/getposts', { posts: temposts }, { withCredentials: true })
                   .then(response => {
                       setposts(response.data);
                   })
@@ -62,7 +63,7 @@ const Profile = () => {
       const deletepost=async (p_name)=>{
         try {
 
-            const response = await fetch(`http://localhost:5000/posts/delete/${p_name}`,{
+            const response = await fetch(`${domain}/posts/delete/${p_name}`,{
               method:"delete",
               credentials:"include",
                       headers:{
@@ -84,7 +85,7 @@ const Profile = () => {
         formData.append('image', selectedFile);
 
         try {
-          const response = await axios.post(`http://localhost:5000/posts/upload/${username}`, formData, {
+          const response = await axios.post(`${domain}/posts/upload/${username}`, formData, {
             credentials:"include",
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -104,7 +105,7 @@ const Profile = () => {
 
       const fetchData = async () => {
         try {
-              const response=await fetch("http://localhost:5000/profile/getprofile",{
+              const response=await fetch(domain+"/profile/getprofile",{
               method:"get",
               credentials:"include",
                       headers:{

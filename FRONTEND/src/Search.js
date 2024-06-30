@@ -3,6 +3,7 @@ import NavBar from './NavBar'
 import { useNavigate } from 'react-router-dom';
 import './Search.css';
 import Title from './Title';
+import { domain } from "./Hostdata";
 
 const Search = () => {
 
@@ -22,7 +23,7 @@ const Search = () => {
         return;
     console.log("skills :"+searchbar);
       try{
-        const response=await fetch("http://localhost:5000/profile/getprofiles/"+searchbar,{
+        const response=await fetch(domain+"/profile/getprofiles/"+searchbar,{
           method:"get",
           credentials:"include",
                   headers:{

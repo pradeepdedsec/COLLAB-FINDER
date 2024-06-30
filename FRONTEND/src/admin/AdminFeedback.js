@@ -3,6 +3,7 @@ import { redirect, useNavigate } from 'react-router-dom'
 import AdminNavBar from './AdminNavBar'
 import './AdminFeedback.css'
 import AdminTitle from './AdminTitle'
+import { domain } from "../Hostdata";
 
 const AdminFeedback = () => {
 
@@ -16,7 +17,7 @@ const AdminFeedback = () => {
         const fetchData = async () => {
           try {
 
-            const response=await fetch("http://localhost:5000/admin/feedback",{
+            const response=await fetch(domain+"/admin/feedback",{
             method:"get",
             credentials:"include",
                     headers:{

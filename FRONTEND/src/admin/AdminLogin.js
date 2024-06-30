@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminLogin.css'
 import Cookies from 'js-cookie';
+import { domain } from "../Hostdata";
 
 const Login = () => {
 
@@ -16,7 +17,7 @@ const Login = () => {
             return;
         }
 
-        const response=await fetch("http://localhost:5000/admin/auth/login",{
+        const response=await fetch(domain+"/admin/auth/login",{
             method:"post",
                 headers:{
                     "Content-Type":"application/json"
@@ -38,7 +39,7 @@ const Login = () => {
 
     async function handleforgotpass(){
 
-        const response=await fetch("http://localhost:5000/admin/auth/forgotpassword/sendpassword",{
+        const response=await fetch(domain+"/admin/auth/forgotpassword/sendpassword",{
             method:"post",
                 headers:{
                     "Content-Type":"application/json"

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css'
 import Cookies from 'js-cookie';
+import { domain } from './Hostdata';
 
 const Login = () => {
 
@@ -14,8 +15,9 @@ const Login = () => {
         if(username ==="" || password===""){
             setMsg("Username and password required feilds");
         }
+        
 
-        const response=await fetch("http://localhost:5000/auth/login",{
+        const response=await fetch(domain+"/auth/login",{
             method:"post",
                 headers:{
                     "Content-Type":"application/json"

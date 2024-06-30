@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { domain } from "./Hostdata";
 
 const Test = () => {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
         // Fetch the images from the server
-        axios.get('http://localhost:5000/test/images', { withCredentials: true })
+        axios.get(domain+'/test/images', { withCredentials: true })
             .then(response => {
                 setImages(response.data);
             })

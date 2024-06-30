@@ -4,6 +4,7 @@ import NavBar from'./NavBar'
 import './DisplayProfile.css'
 import Title from './Title';
 import axios from 'axios';
+import { domain } from './Hostdata';
 
 const DisplayProfile = () => {
 
@@ -30,13 +31,13 @@ const DisplayProfile = () => {
 
     const getposts= async (uname)=>{
 
-        axios.get(`http://localhost:5000/posts/get/${uname}`, { withCredentials: true })
+        axios.get(`${domain}/posts/get/${uname}`, { withCredentials: true })
         .then(async response => {
           const temposts = response.data;
           console.log("posts:", JSON.stringify(temposts));
 
 
-        axios.post('http://localhost:5000/posts/getposts', { posts: temposts }, { withCredentials: true })
+        axios.post(domain+'/posts/getposts', { posts: temposts }, { withCredentials: true })
         .then(response => {
                   setposts(response.data);
               })
@@ -54,7 +55,7 @@ const DisplayProfile = () => {
         const fetchData = async () => {
           try {
             console.log("here     :"+username);
-            const url="http://localhost:5000/profile/displayprofile/"+uname;
+            const url=domain+"/profile/displayprofile/"+uname;
             console.log(url);
             const response=await fetch(url,{
             method:"get",

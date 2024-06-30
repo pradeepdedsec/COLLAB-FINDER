@@ -6,6 +6,7 @@ import { Button, Chiptag, InputField, RadioButton,TEXTAREA } from "./components/
 import { IoIosClose } from "react-icons/io";
 import Title from "./Title";
 import axios from 'axios';
+import { domain } from "./Hostdata";
 
 const UpdateProfile = () => {
   const [isverified, setverified] = useState(false);
@@ -39,7 +40,7 @@ const UpdateProfile = () => {
     formData.append('image', selectedFile);
 
     try {
-      const response = await axios.post(`http://localhost:5000/profilepic/upload/${username}`, formData, {
+      const response = await axios.post(`${domain}/profilepic/upload/${username}`, formData, {
         credentials:"include",
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -57,7 +58,7 @@ const UpdateProfile = () => {
       try {
 
         const response = await fetch(
-          "http://localhost:5000/profile/getprofile",
+          domain+"/profile/getprofile",
           {
             method: "get",
             credentials:"include",
@@ -199,7 +200,7 @@ const UpdateProfile = () => {
       console.log(t);
 
       const response = await fetch(
-        "http://localhost:5000/profile/updateProfile",
+        domain+"/profile/updateProfile",
         {
           method: "post",
           credentials:"include",

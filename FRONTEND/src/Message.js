@@ -6,6 +6,7 @@ import Title from './Title';
 import './Message.css';
 import { IoSend } from "react-icons/io5";
 import axios from 'axios';
+import { domain } from "./Hostdata";
 
 const Message = () => {
 
@@ -27,7 +28,7 @@ const Message = () => {
   const fetchData = async () => {
     try {
 
-      const response=await fetch("http://localhost:5000/message/getallchat",{
+      const response=await fetch(domain+"/message/getallchat",{
           method:"get",
           credentials:"include",
                   headers:{
@@ -43,7 +44,7 @@ const Message = () => {
             
             if(msgto && msgto!==currentuser){
 
-              const url="http://localhost:5000/profile/displayprofile/"+msgto;
+              const url=domain+"/profile/displayprofile/"+msgto;
               console.log(url);
               const response=await fetch(url,{
               method:"get",
@@ -91,7 +92,7 @@ const Message = () => {
 
       try {
             console.log("currentfrnd 1:"+cfrnd[0]);
-            const response=await fetch("http://localhost:5000/message/getchat/"+cfrnd[0],{
+            const response=await fetch(domain+"/message/getchat/"+cfrnd[0],{
                 method:"get",
                 credentials:"include",
                         headers:{
@@ -116,7 +117,7 @@ const Message = () => {
     const to=currentfrnd[0];
     const msg=currenttxtboxmsg;
     
-    const response=await fetch("http://localhost:5000/message/savechat",{
+    const response=await fetch(domain+"/message/savechat",{
                 method:"post",
                 credentials:"include",
                         headers:{

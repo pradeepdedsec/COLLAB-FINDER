@@ -5,6 +5,7 @@ import './Adminprofile.css'
 import AdminTitle from './AdminTitle';
 import DeleteUser from '../Overlay/DeleteUser';
 import axios from 'axios';
+import { domain } from '../Hostdata';
 
 const AdminDisplayProfile = () => {
 
@@ -31,13 +32,13 @@ const AdminDisplayProfile = () => {
 
     const getposts= async (uname)=>{
 
-        axios.get(`http://localhost:5000/admin/get/${uname}`, { withCredentials: true })
+        axios.get(`${domain}/admin/get/${uname}`, { withCredentials: true })
         .then(async response => {
           const temposts = response.data;
           console.log("posts:", JSON.stringify(temposts));
 
 
-        axios.post('http://localhost:5000/admin/getposts', { posts: temposts }, { withCredentials: true })
+        axios.post(domain+'/admin/getposts', { posts: temposts }, { withCredentials: true })
         .then(response => {
                   setposts(response.data);
               })
@@ -54,7 +55,7 @@ const AdminDisplayProfile = () => {
         const fetchData = async () => {
           try {
             console.log("here     :"+username);
-            const url="http://localhost:5000/admin/profile/displayprofile/"+uname;
+            const url=domain+"/admin/profile/displayprofile/"+uname;
             console.log(url);
             const response=await fetch(url,{
             method:"get",
@@ -122,7 +123,7 @@ const AdminDisplayProfile = () => {
         console.log(username);
         try {
 
-            const response=await fetch("http://localhost:5000/admin/deleteuser",{
+            const response=await fetch(domain+"/admin/deleteuser",{
             method:"delete",
             credentials:"include",
                     headers:{
