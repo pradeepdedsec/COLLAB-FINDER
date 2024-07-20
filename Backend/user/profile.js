@@ -20,11 +20,12 @@ Router.get("/getprofile",async (req,res)=>{           //changed
         let {username,name,age,gender,skill,dob,email,phone_number,about,city,state,country,education,ideas,profile_name}=await results;
 
         try{
-        
-        const imagePath = path.join(__dirname, '../uploads',profile_name);
-        const imageData = fs.readFileSync(imagePath).toString('base64');
-        const ext = path.extname(profile_name).toLowerCase().slice(1); // Get the extension without the dot
-        profile_name= `data:image/${ext};base64,${imageData}`;
+            if(profile_name){
+                const imagePath = path.join(__dirname, '../uploads',profile_name);
+                const imageData = fs.readFileSync(imagePath).toString('base64');
+                const ext = path.extname(profile_name).toLowerCase().slice(1); // Get the extension without the dot
+                profile_name= `data:image/${ext};base64,${imageData}`;
+            }
         }
         catch(err){
             console.log(err);

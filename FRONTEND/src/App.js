@@ -21,8 +21,12 @@ import Request from './Request';
 import AdminForgotpass from './admin/AdminForgotpass';
 import AdminDisplayMsgs from './admin/AdminDisplayMsgs';
 import Test from './Test';
+import { useEffect } from 'react';
 
 const App =() =>{
+  useEffect(()=>{
+    console.log("hostname :",window.location);
+  },[])
 
   return <>
   <Routes>

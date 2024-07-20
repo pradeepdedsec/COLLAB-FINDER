@@ -10,15 +10,38 @@ const db=require("../dbdata/data");
 
 Router.use(express.json());
 
+const savechat =async function(username,message,to){
+    db.query(`insert into message (sender,receiver,chat) values("${username}","${to}","${message}")`,async(err,res1)=>{
+        if(err) {console.log(err); return({"message":"Invalid user 1"})}
+        else{
+            db.query(`select sender,receiver,chat,timestamp from message where id="${await res1.insertId}"`,async(err,res2)=>{
+                if(err) {console.log(err); return({"message":"Invalid user 1"})}
+                else{
+                    console.log("message :"+JSON.stringify(res2));
+                    return({"message":"message has been sent Successfully","chat":res2[0]});
+                } 
+            });
+        } 
+    });
+}
 
+module.exports=savechat;
 
 Router.post("/savechat",async(req,res) =>{
     const username=await req.user.username;
     const {to,message}=await req.body;
 
-    db.query(`insert into message (sender,receiver,chat) values("${username}","${to}","${await message}")`,async(err,res1)=>{
+    db.query(`insert into message (sender,receiver,chat) values("${username}","${to}","${message}")`,async(err,res1)=>{
         if(err) {console.log(err); res.json({"message":"Invalid user 1"})}
-        else res.json({"message":"message has been sent Successfully"});
+        else{
+            db.query(`select sender,receiver,chat,timestamp from message where id="${await res1.insertId}"`,async(err,res2)=>{
+                if(err) {console.log(err); res.json({"message":"Invalid user 1"})}
+                else{
+                    console.log("message :"+JSON.stringify(res2));
+                    res.json({"message":"message has been sent Successfully","chat":res2[0]});
+                } 
+            });
+        } 
     });
 });
 
@@ -26,11 +49,11 @@ Router.get("/getchat/:currentfrnd",async(req,res) =>{                //changed
     const currentuser=await req.user.username;
     const frnd=req.params.currentfrnd;
     
-    const query=`select sender,receiver,chat,timestamp from message where sender="${await currentuser}" && receiver="${await frnd}"`;
+    const query=`select sender,receiver,chat,timestamp from message where sender="${await currentuser}" && receiver="${frnd}"`;
     db.query(query,async(err,res1) =>{
         if(err) {console.log(err); console.log(err); res.json({"message":"Invalid user 0"})}
         else {
-            db.query(`select sender,receiver,chat,timestamp from message where sender="${await frnd}" && receiver="${await currentuser}"`,async (err,res2) =>{
+            db.query(`select sender,receiver,chat,timestamp from message where sender="${frnd}" && receiver="${await currentuser}"`,async (err,res2) =>{
                 if(err) {console.log(err); console.log(err); res.json({"message":"Invalid user 0"})}
                 else{
                     const concatedarray=await res1.concat(res2);
@@ -137,5 +160,24 @@ Router.get("/getallchat",async(req,res)=>{           //changed
 });
 
 module.exports=Router
+
+/*
+const savechat =async function(username,message,to){
+    db.query(`insert into message (sender,receiver,chat) values("${username}","${to}","${message}")`,async(err,res1)=>{
+        if(err) {console.log(err); return({"message":"Invalid user 1"})}
+        else{
+            db.query(`select sender,receiver,chat,timestamp from message where id="${await res1.insertId}"`,async(err,res2)=>{
+                if(err) {console.log(err); return({"message":"Invalid user 1"})}
+                else{
+                    console.log("message :"+JSON.stringify(res2));
+                    return({"message":"message has been sent Successfully","chat":res2[0]});
+                } 
+            });
+        } 
+    });
+}
+
+module.exports=savechat;
+*/
 
 

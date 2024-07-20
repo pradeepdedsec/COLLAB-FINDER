@@ -14,7 +14,7 @@ const getDetails =async (req,res,next) =>{
 
     db.query(`select * from accounts where username="${username}"`,async(err,results) =>{
         if(err){ 
-            console.error(err);
+            console.error(err.message);
             req.user="invalid";
             next();
         }
