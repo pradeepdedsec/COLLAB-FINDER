@@ -50,7 +50,6 @@ io.on("connection",async (socket)=>{
         let name=jwt.verify(userid,process.env.SECRET_KEY);
         if(name){
             users.set(name.username,socket.id)
-            //users[name.username]=socket.id;
             console.log("user :",name.username);
         }
     }
@@ -71,9 +70,6 @@ io.on("connection",async (socket)=>{
         if(sender){
             await savechat(sender,message,to,exe);
         }
-
-
-        //io.to(socket.id).emit("receive_message","message");
     });
 
     socket.on("hello",(data)=>{
@@ -115,7 +111,6 @@ app.listen(5000,'0.0.0.0',() =>{
   
     for (const interfaceName in networkInterfaces) {
       for (const net of networkInterfaces[interfaceName]) {
-        // Skip over non-IPv4 and internal (i.e., 127.0.0.1) addresses 
         if (net.family === 'IPv4' && !net.internal) {
           addresses.push(net.address);
         }
@@ -136,8 +131,6 @@ const savechat =async function(username,message,to,exe){
                 else{
                     console.log("message 0:"+JSON.stringify(res2));
                     exe(res2[0]);
-                    //io.emit("receive_message","res2[0]");
-                    //io.to(users[username]).emit("receive_message",res2[0]);
                 } 
             });
         } 
