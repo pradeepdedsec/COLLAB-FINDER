@@ -3,60 +3,34 @@
 
 Collab-Finder is a platform designed to connect individuals for collaborative learning projects.  
 
-## **Tech Stack**  
-- **Frontend**: HTML, CSS, JavaScript, React.js  
-- **Backend**: Express.js  
-- **Database**: MySQL  
-
----
-
-## **Features**  
-- Personalized project recommendations.  
-- A dedicated project showcase section.  
-- Real-time chatbox for seamless communication.  
-- Administrative tools for managing user data, messages, and feedback.  
-
----
+**Tech Stack**: HTML, CSS, JavaScript, React.js, Express.js, MySQL  
 
 ## **Setup Instructions**  
+Run the following commands step-by-step to set up the project:  
+```bash
+# Step 1: Start XAMPP and configure the database
+# Open phpMyAdmin, go to the Import section, upload the 'queries.sql' file, and click Import.
 
-### 1. Install XAMPP Server  
-   - Start MySQL from XAMPP.
+# Step 2: Install Node.js (skip if already installed)
+# Download and install Node.js from https://nodejs.org
 
-### 2. Configure the Database  
-   - Open **phpMyAdmin**.  
-   - Go to the **Import** section.  
-   - Upload the `queries.sql` file.  
-   - Click **Import** to create the database (`cbfinder`) and required tables.  
+# Step 3: Clone the project and open it in VS Code
+git clone <repository-url>
+cd <project-folder>
 
-### 3. Install and Set Up Node.js  
-   - Download and install Node.js from the [official website](https://nodejs.org).  
+# Step 4: Update the environment variables
+# Open the .env file and update the following:
+# SERVER_EMAIL=your-email@example.com
+# SERVER_PASSWORD=your-app-password
 
-### 4. Set Up the Project  
-   - Open **VS Code** and drag-and-drop the project folder.  
-   - Update the `.env` file:  
-     ```env
-     SERVER_EMAIL=your-email@example.com
-     SERVER_PASSWORD=your-app-password
-     ```
-     Replace `your-email@example.com` with your email and `your-app-password` with the temporary password (App Password) from your email provider.  
+# Step 5: Install dependencies and build the frontend
+npm install
+cd FRONTEND
+npm run build
+cd ..
 
-### 5. Install Dependencies 
-   Run the following commands in the project root directory:  
-   ```bash
-   npm install
-   cd FRONTEND
-   npm run build
-   cd ..
+# Step 6: Start the application
+npm run dev
 
-### 6. Start the Application
-    Run the project using the command:
-    ```bash
-    npm run dev
-
-### 7. Access the Application
-    Open your browser and go to:
-    http://localhost:5000
-
-
-
+# Access the application in your browser
+# URL: http://localhost:5000
