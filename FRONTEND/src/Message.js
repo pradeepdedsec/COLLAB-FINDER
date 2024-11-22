@@ -6,7 +6,7 @@ import Title from './Title';
 import './Message.css';
 import { IoSend } from "react-icons/io5";
 import axios from 'axios';
-import { domain } from "./Hostdata";
+import { domain, socketdomain } from "./Hostdata";
 import io from 'socket.io-client';
 import Cookies from 'js-cookie';
 let socket;
@@ -28,32 +28,45 @@ const Message = () => {
   const {msgto}=useParams();
   let lastmsg=useRef();
 
+  useEffect(()=>{
+    window.addEventListener("beforeunload", (event) => {
+      // Prevent reload by canceling the event
+      event.preventDefault();
+    });
+  },[]);
+
 
 
   const fetchData = async () => {
     try {
 
-      const response=await fetch(domain+"/message/getallchat",{
-          method:"get",
-          credentials:"include",
-                  headers:{
-                  "Content-Type":"application/json"
-                  }
-          });
-          const res1=await response.json();
+      const cookie = localStorage.getItem('collab');
+      const response = await fetch(domain + "/message/getallchat", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${cookie}`,
+            "Content-Type": "application/json"
+        }
+      });
 
-          if(await res1){
-            currentuser=await res1.username;
-            let initialfrnd;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const res1 = await response.json();
+      console.log("check :","username" in res1)
+      if ("username" in res1 && res1.namelists.length>0) {
+          currentuser = res1.username;
+          let initialfrnd;
             
             if(msgto && msgto!==currentuser){
 
+              const cookie = localStorage.getItem('collab');
               const url=domain+"/profile/displayprofile/"+msgto;
               const response=await fetch(url,{
               method:"get",
-              credentials:"include",
                       headers:{
-                          "Content-Type":"application/json"
+                        "Authorization":`Bearer ${cookie}`,
+                        "Content-Type":"application/json"
                       }
               });
               const res=await response.json();
@@ -84,23 +97,18 @@ const Message = () => {
 
   useEffect(() => {
      fetchData();
-    
-    socket=io.connect("http://localhost:5001",{
+    console.log("connecting...")
+    socket=io.connect(socketdomain ,{
       query:{
-        userId:Cookies.get('collab'),
+        userId:localStorage.getItem("collab"),
       }
     }
     );
-
-    return ()=> socket.close();
+  
+    
   },[]);
 
-  //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByYWRlZXBkZWRzZWMiLCJpYXQiOjE3MTk3Mzk5MDIsImV4cCI6MTcyMDA5OTkwMn0.BCm0VfbpsaUWYwrZapibLh39ZfPXmEKIqqmhtmBUEX8"
-
-  function addchat(){
-    console.log("currentchats :",currentchats);
-    //setcurrentchats([...currentchats,{}]);
-  }
+  
   useEffect(()=>{
     let tt;
     const temfun=(data)=>{
@@ -132,10 +140,11 @@ const Message = () => {
   async function handlecurrentfrndchange(cfrnd){
 
       try {
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/message/getchat/"+cfrnd[0],{
                 method:"get",
-                credentials:"include",
                         headers:{
+                        "Authorization":`Bearer ${cookie}`,
                         "Content-Type":"application/json"
                         }
                 });
@@ -192,7 +201,6 @@ const Message = () => {
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       storechat();
-      addchat();
     }
   };
 
@@ -214,8 +222,8 @@ const Message = () => {
       
       <div className='currentchatbox'>
         <div className='chatheader'>
-        {currentfrnd[1]!==null?(<img onClick={()=>navigate("/DisplayProfile/"+currentfrnd[0])} src={currentfrnd[1]} alt="Dp" />)
-        :(<img onClick={()=>navigate("/DisplayProfile/"+currentfrnd[0])} src={require("./logo.jpg")} alt="Dp" />)}
+        <img onClick={()=>navigate("/DisplayProfile/"+currentfrnd[0])} src={currentfrnd[1] || require("./logo.jpg")} alt="Dps" />
+        
           <p className='currentfrndname'>{currentfrnd[0]}</p>
         </div>
         <div id='currentchatbody' className='currentchatbody'>
@@ -243,39 +251,3 @@ export default Message
 
 
 
-/*
-<div className='totalchatbox'>
-      <div className='namelistsbox'>
-
-        <div className='namelistsearchdiv'>
-          <input type="text" />
-          <button>Search</button>
-        </div>
-        {
-          namelists.map((e)=><div className='namebox'><img src={require("./logo.jpg")} alt="Error" /><p>{e}</p></div>)
-        }
-      </div>
-      
-      <div className='currentchatbox'>
-        <div className='chatheader'>
-          <img src={require("./logo.jpg")} alt="Error" />
-          <p className='currentfrndname'>jebasharon</p>
-        </div>
-        <div className='currentchatbody'>
-                  {
-                    currentchats.map((e)=> 
-                    <div className='chatcontainer'>
-                      <div className='chatandtime' style={{float:e.sender===currentuser?"right":"none"}}>
-                        <p>{e.chat}</p>
-                        <p className='timestamp'>{e.timestamp}</p>
-                      </div>
-                    </div>
-                  )
-                  }
-        </div>
-        <div className='msgsentbox'>
-            <input className='msgforsent' type="text" /><button className='msgsendbtn'>Send</button>
-        </div>
-      </div>
-    </div>
-*/

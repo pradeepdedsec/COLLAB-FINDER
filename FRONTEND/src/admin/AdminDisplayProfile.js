@@ -1,5 +1,5 @@
 import React, {useState ,useEffect} from 'react'
-import { Router,useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import AdminNavBar from'./AdminNavBar'
 import './Adminprofile.css'
 import AdminTitle from './AdminTitle';
@@ -32,13 +32,22 @@ const AdminDisplayProfile = () => {
 
     const getposts= async (uname)=>{
 
-        axios.get(`${domain}/admin/get/${uname}`, { withCredentials: true })
+        const cookie = localStorage.getItem('collab');
+        axios.get(`${domain}/admin/get/${uname}`, {
+            headers: {
+              "Authorization": `Bearer ${cookie}`,
+              },
+        })
         .then(async response => {
           const temposts = response.data;
           console.log("posts:", JSON.stringify(temposts));
 
 
-        axios.post(domain+'/admin/getposts', { posts: temposts }, { withCredentials: true })
+        axios.post(domain+'/admin/getposts', { posts: temposts }, {
+            headers: {
+              "Authorization": `Bearer ${cookie}`,
+              },
+        })
         .then(response => {
                   setposts(response.data);
               })
@@ -54,13 +63,12 @@ const AdminDisplayProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            console.log("here     :"+username);
+            const cookie = localStorage.getItem('collab');
             const url=domain+"/admin/profile/displayprofile/"+uname;
-            console.log(url);
             const response=await fetch(url,{
             method:"get",
-            credentials:"include",
                     headers:{
+                        "Authorization":`Bearer ${cookie}`,
                         "Content-Type":"application/json"
                     }
             });
@@ -122,11 +130,11 @@ const AdminDisplayProfile = () => {
     async function deleteuser(){
         console.log(username);
         try {
-
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/admin/deleteuser",{
             method:"delete",
-            credentials:"include",
                     headers:{
+                        "Authorization":`Bearer ${cookie}`,
                         "Content-Type":"application/json"
                     },
                     body:JSON.stringify({"username":username})
@@ -178,7 +186,7 @@ const AdminDisplayProfile = () => {
                             <p>Phone number : {phone_number} </p>
                         </div>
                         <div id='p112'>
-                            <p>DOB    :{dob}</p>
+                            <p>DOB    : {dob}</p>
                             <p style={{fontWeight:"bold"}}>Location </p>
                             <p>city : {city} </p>
                             <p>state : {state} </p>
@@ -230,7 +238,7 @@ const AdminDisplayProfile = () => {
                     <div id='p77'  className='projectideas'>
                         <h2>POSTS</h2>
                         {
-                            posts.length>0?(posts.map((e)=><div className='Dpostdiv'><img src={e.data} />
+                            posts.length>0?(posts.map((e)=><div className='Dpostdiv'><img src={e.data} alt="Error" />
                             </div>)):(<br/>)
                         }
                     </div>

@@ -12,7 +12,7 @@ const AdminTitle = () => {
 
 
   function handlelogout(){
-    Cookies.remove("collab");
+    localStorage.removeItem("collab");
     console.log("entered");
     navigate("/AdminLogin");
   }

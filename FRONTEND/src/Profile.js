@@ -1,5 +1,5 @@
-import React, {useState ,useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, {useState ,useEffect, useRef} from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import NavBar from'./NavBar'
 import './profile.css'
 import Title from './Title';
@@ -26,7 +26,8 @@ const Profile = () => {
     const [education,seteducaion]=useState([]);
     const [ideas,setideas]=useState([]);
     const [profile_name,setprofile_name]=useState('');
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState("");
+    const fileInputRef = useRef(null);
     const [posts,setposts]=useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -34,18 +35,29 @@ const Profile = () => {
     const navigate=useNavigate();
     const [logisOpen, setlogIsOpen] = useState(false);
 
+    const {oldFile}=useParams();
+
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
       };
 
       const getposts= async (uname)=>{
 
-            axios.get(`${domain}/posts/get/${uname}`, { withCredentials: true })
+            const cookie = localStorage.getItem('collab');
+            axios.get(`${domain}/posts/get/${uname}`, {
+                headers: {
+                  'Authorization': `Bearer ${cookie}`,
+                  },
+            })
             .then(async response => {
               const temposts = response.data;
               console.log("posts:", JSON.stringify(temposts));
 
-              axios.post(domain+'/posts/getposts', { posts: temposts }, { withCredentials: true })
+              axios.post(domain+'/posts/getposts', { posts: temposts }, {
+                headers: {
+                  'Authorization': `Bearer ${cookie}`,
+                  },
+            })
                   .then(response => {
                       setposts(response.data);
                   })
@@ -56,17 +68,17 @@ const Profile = () => {
               .catch(error => {
                   console.error('Error fetching posts:', error);
               });
-
       }
 
 
       const deletepost=async (p_name)=>{
         try {
 
-            const response = await fetch(`${domain}/posts/delete/${p_name}`,{
+            const cookie = localStorage.getItem('collab');
+            await fetch(`${domain}/posts/delete/${p_name}`,{
               method:"delete",
-              credentials:"include",
                       headers:{
+                          "Authorization":`Bearer ${cookie}`,
                           "Content-Type":"application/json"
                       }
               });
@@ -85,13 +97,17 @@ const Profile = () => {
         formData.append('image', selectedFile);
 
         try {
+          const cookie = localStorage.getItem('collab');
           const response = await axios.post(`${domain}/posts/upload/${username}`, formData, {
-            credentials:"include",
             headers: {
+              'Authorization': `Bearer ${cookie}`,
               'Content-Type': 'multipart/form-data'
             }
           });
           setSelectedFile(null);
+          if (fileInputRef.current) { 
+            fileInputRef.current.value = "";
+          }
           const resp=await response.data;
           console.log('Image uploaded:', resp);
           if(resp.message==='Image uploaded successfully.'){
@@ -105,10 +121,11 @@ const Profile = () => {
 
       const fetchData = async () => {
         try {
+              const cookie = localStorage.getItem('collab');
               const response=await fetch(domain+"/profile/getprofile",{
               method:"get",
-              credentials:"include",
                       headers:{
+                          "Authorization":`Bearer ${cookie}`,
                           "Content-Type":"application/json"
                       }
               });
@@ -139,7 +156,6 @@ const Profile = () => {
           }
           if((await res1.education)){
               if(await res1.education.length>0)
-              console.log("oneone",await res1.education.split("|"))
                   seteducaion(await res1.education.split(","));
           }
           if((await res1.ideas)){
@@ -154,14 +170,14 @@ const Profile = () => {
 
       
     useEffect(() => {
+        
         fetchData();
       }, []);
     
     console.log("valid");
 
     function handlelogout(){
-        
-        Cookies.remove("collab");
+        localStorage.removeItem("collab");
         console.log("entered");
         //window.location.reload();
         navigate("/Login");
@@ -179,8 +195,12 @@ const Profile = () => {
         setlogIsOpen(false);
       };
 
-    const handledeletepost=(poname)=>{
+    const delpos = (poname)=>{
         setcurdelpos(poname);
+    }
+
+    const handledeletepost=(poname)=>{
+        delpos(poname);
         openOverlay();
     }
     
@@ -226,9 +246,11 @@ const Profile = () => {
 
 
             <div id='p3'  className='Dabox'>
-                <h2>ABOUT</h2>
-                <div id='p33'  className='Daboutbox'>
-                    <p className='Dabouttxt'>{about}</p>
+                <div>
+                    <h2>ABOUT</h2>
+                    <div id='p33'  className='Daboutbox'>
+                        <p className='Dabouttxt'>{about}</p>
+                    </div>
                 </div>
             </div>
 
@@ -249,7 +271,6 @@ const Profile = () => {
                 <div id='p55'  className='projectideas'>
                 <h2>EDUCATION</h2>
                     <ul id='ideas'>
-                        {console.log(education)}
                     {education.map((s,k) =><li key={k}>{s}</li>)}
                     </ul>
                 </div>
@@ -258,12 +279,12 @@ const Profile = () => {
                 <div id='p77'  className='projectideas'>
                 <h2>POSTS</h2>
                 <div id='p777'>
-                    <input id='choosebtn' type="file" onChange={handleFileChange} />
-                    <button id='fileuploadbtn' onClick={handleSubmit}>Upload</button>
+                    <input id='choosebtn' ref={fileInputRef}  type="file" onChange={handleFileChange} />
+                    <button id='fileuploadbtn'onClick={handleSubmit}>Upload</button>
                 </div>
                 {
                     posts.length>0?(posts.map((e)=><div className='postdiv'><img src={e.data} alt='Error' />
-                    <div className='postbottom'><button onClick={()=>handledeletepost(e.imagename)}>delete</button></div>
+                    <div className='postbottom'><button onClick={()=>handledeletepost(e.name)}>delete</button></div>
                     </div>)):(<br/>)
                 }
                 </div>

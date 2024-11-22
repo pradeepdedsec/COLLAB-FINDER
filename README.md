@@ -1,45 +1,62 @@
-# COLLAB-FINDER
+# **COLLAB-FINDER**  
+### Social Networking Platform for Project Collaboration  
 
-SOCIAL NETWORKING PLATFORM
-PROJECT COLLABORATION
+Collab-Finder is a platform designed to connect individuals for collaborative learning projects.  
 
-TECH STACK :HTML, CSS, JAVASCRIPT, REACT JS, EXPRESS JS, MYSQL
+## **Tech Stack**  
+- **Frontend**: HTML, CSS, JavaScript, React.js  
+- **Backend**: Express.js  
+- **Database**: MySQL  
+
+---
+
+## **Features**  
+- Personalized project recommendations.  
+- A dedicated project showcase section.  
+- Real-time chatbox for seamless communication.  
+- Administrative tools for managing user data, messages, and feedback.  
+
+---
+
+## **Setup Instructions**  
+
+### 1. Install XAMPP Server  
+   - Start MySQL from XAMPP.
+
+### 2. Configure the Database  
+   - Open **phpMyAdmin**.  
+   - Go to the **Import** section.  
+   - Upload the `queries.sql` file.  
+   - Click **Import** to create the database (`cbfinder`) and required tables.  
+
+### 3. Install and Set Up Node.js  
+   - Download and install Node.js from the [official website](https://nodejs.org).  
+
+### 4. Set Up the Project  
+   - Open **VS Code** and drag-and-drop the project folder.  
+   - Update the `.env` file:  
+     ```env
+     SERVER_EMAIL=your-email@example.com
+     SERVER_PASSWORD=your-app-password
+     ```
+     Replace `your-email@example.com` with your email and `your-app-password` with the temporary password (App Password) from your email provider.  
+
+### 5. Install Dependencies 
+   Run the following commands in the project root directory:  
+   ```bash
+   npm install
+   cd FRONTEND
+   npm run build
+   cd ..
+
+### 6. Start the Application
+    Run the project using the command:
+    ```bash
+    npm run dev
+
+### 7. Access the Application
+    Open your browser and go to:
+    http://localhost:5000
 
 
-Developed a social networking platform to connect individuals for collaborative learning projects.Implemented features such as personalized recommendations and a project showcase section.Designed a chatbox for communication between users.Managed user data, reviewed feedback submissions, and oversaw user messages as an administrator.Addressed the challenge of finding project collaborators by creating a dedicated platform tailored for project development purposes.
 
-# STEPS
-
-1.Install and open xampp server.
-
-2.Go to phpmyadmin.
-
-3.Go to import section.
-
-4.Upload the file queries.sql file, then scroll down and press import button then the database(cbfinder) and tables will be created.
-
-5.Install and setup nodejs.
-
-6.Open vscode, drag and drop backend folder.
-
-7.Change the SERVER_EMAIL with your own email address and SERVER_PASSWORD with your email account temporary password in the ".env" file.
-
-8.Install dependencies using this command : npm install
-
-9.Command to run backend server : npm run dev
-
-10.Open another vscode window, drag and drop frontend folder.
-
-11.Install dependencies using this command : npm install
-
-12.Command to run frontend server : npm start
-
-13.The collab finder react web application will be started at "localhost:3000".
-
-Admin username : "Admin-pradeep"
-
-Admin email : "pradeepsbitly@gmail.com"
-
-Admin password : "admin-pass"
-
-you can change the admin credentails in ".env" file if needed.

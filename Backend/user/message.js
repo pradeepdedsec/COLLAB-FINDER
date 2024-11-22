@@ -114,43 +114,48 @@ Router.get("/getallchat",async(req,res)=>{           //changed
 
                             const uniqueNames = Array.from(namesMap.keys());
                             console.log("namelists :"+uniqueNames);
-                            db.query(`select username,profile_name from accounts where username in (?)`,[uniqueNames],async(err,res3)=>{
-                                if(err) {console.log(err); res.json({"message":"Invalid user"})}
-                                else{
-
-                                    const indexDict = {};
-                                    uniqueNames.forEach((name, index) => {
-                                        indexDict[name] = index;
-                                    });
-
-                                    // Sort res3 based on the indices of usernames in uniqueNames
-                                    const sortedRes3 = await res3.sort((a, b) => indexDict[a.username] - indexDict[b.username]);
-
-                                    
-
-                                    let imageNames=sortedRes3.map((e)=>e.profile_name);
-
-                                    const imagesDir = path.join(__dirname, '../uploads');
-                                    const images = imageNames.map( imageName => {
-                                        if(imageName){
-                                            let temp=imageName;
-                                            const imagePath = path.join(imagesDir, temp);
-                                            const imageData = fs.readFileSync(imagePath).toString('base64');
-                                            const ext = path.extname(imageName).toLowerCase().slice(1); // Get the extension without the dot
-                                            return {"profile_name": `data:image/${ext};base64,${imageData}` };
+                            if(!uniqueNames || uniqueNames.length === 0){
+                                res.json({"username":await username,"namelists":[]});
+                            }
+                            else{
+                                db.query(`select username,profile_name from accounts where username in (?)`,[uniqueNames],async(err,res3)=>{
+                                    if(err) {console.log(err); res.json({"message":"Invalid user"})}
+                                    else{
+    
+                                        const indexDict = {};
+                                        uniqueNames.forEach((name, index) => {
+                                            indexDict[name] = index;
+                                        });
+    
+                                        // Sort res3 based on the indices of usernames in uniqueNames
+                                        const sortedRes3 = await res3.sort((a, b) => indexDict[a.username] - indexDict[b.username]);
+    
+                                        
+    
+                                        let imageNames=sortedRes3.map((e)=>e.profile_name);
+    
+                                        const imagesDir = path.join(__dirname, '../uploads');
+                                        const images = imageNames.map( imageName => {
+                                            if(imageName){
+                                                let temp=imageName;
+                                                const imagePath = path.join(imagesDir, temp);
+                                                const imageData = fs.readFileSync(imagePath).toString('base64');
+                                                const ext = path.extname(imageName).toLowerCase().slice(1); // Get the extension without the dot
+                                                return {"profile_name": `data:image/${ext};base64,${imageData}` };
+                                                }
+                                            else{
+                                                return {"profile_name":null};
                                             }
-                                        else{
-                                            return {"profile_name":null};
+    
+                                        });
+                                        for(let i=0;i<sortedRes3.length;i++){
+                                            sortedRes3[i].profile_name=await images[i].profile_name;
                                         }
-
-                                    });
-                                    for(let i=0;i<sortedRes3.length;i++){
-                                        sortedRes3[i].profile_name=await images[i].profile_name;
+                                        console.log("entered");
+                                        res.json({"username":await username,"namelists":await sortedRes3});
                                     }
-                                    console.log("entered");
-                                    res.json({"username":await username,"namelists":await sortedRes3});
-                                }
-                            });
+                                });
+                            }
                         }
                     });
                 }

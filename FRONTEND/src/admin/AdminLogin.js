@@ -16,10 +16,11 @@ const Login = () => {
             setMsg("Username and password required feilds");
             return;
         }
-
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/admin/auth/login",{
             method:"post",
                 headers:{
+                    "Authorization":`Bearer ${cookie}`,
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({"username":username,"password":password})
@@ -29,7 +30,7 @@ const Login = () => {
 
         console.log(await res1.message);
         if(await res1.message==="Successfully Loggedin"){
-            Cookies.set("collab",res1.cookie,{expires:3});
+            localStorage.setItem("collab",res1.cookie);
             console.log(res1.cookie);
             navigate("/AdminHome");
         }
@@ -38,10 +39,11 @@ const Login = () => {
     }
 
     async function handleforgotpass(){
-
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/admin/auth/forgotpassword/sendpassword",{
             method:"post",
                 headers:{
+                    "Authorization":`Bearer ${cookie}`,
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({})

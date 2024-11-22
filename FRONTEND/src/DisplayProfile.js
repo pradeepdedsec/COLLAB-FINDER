@@ -31,13 +31,23 @@ const DisplayProfile = () => {
 
     const getposts= async (uname)=>{
 
-        axios.get(`${domain}/posts/get/${uname}`, { withCredentials: true })
+        const cookie = localStorage.getItem('collab');
+
+        axios.get(`${domain}/posts/get/${uname}`, {
+            headers: {
+              'Authorization': `Bearer ${cookie}`, // Attach token in Authorization header
+            },
+          })
         .then(async response => {
           const temposts = response.data;
           console.log("posts:", JSON.stringify(temposts));
 
 
-        axios.post(domain+'/posts/getposts', { posts: temposts }, { withCredentials: true })
+        axios.post(domain+'/posts/getposts', { posts: temposts }, {
+            headers: {
+              'Authorization': `Bearer ${cookie}`, // Attach token in Authorization header
+            },
+          })
         .then(response => {
                   setposts(response.data);
               })
@@ -52,6 +62,7 @@ const DisplayProfile = () => {
 
 
     useEffect(() => {
+        const cookie = localStorage.getItem('collab');
         const fetchData = async () => {
           try {
             console.log("here     :"+username);
@@ -59,8 +70,8 @@ const DisplayProfile = () => {
             console.log(url);
             const response=await fetch(url,{
             method:"get",
-            credentials:"include",
                     headers:{
+                        'Authorization': `Bearer ${cookie}`,
                         "Content-Type":"application/json"
                     }
             });

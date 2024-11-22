@@ -1,1 +1,2 @@
-export const domain="http://localhost:5000";
+import { domain } from "../Hostdata";
+export const domain=domain;

@@ -17,22 +17,19 @@ const Login = () => {
         }
         
 
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/auth/login",{
             method:"post",
                 headers:{
+                    "Authorization":`Bearer ${cookie}`,
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({"username":username,"password":password})
         });
 
         const res1=await response.json();
-
-        
-        if(res1.message==="Successfully Loggedin"){
-            Cookies.set("collab",res1.cookie,{expires:3});
-            console.log(res1.cookie);
-        }
-        if(await res1.message==="Successfully Loggedin"){
+        localStorage.setItem("collab",await res1.cookie);
+        if(await res1.message === "Successfully Logged in"){
             navigate("/Home");
         }
         setMsg(res1.message);

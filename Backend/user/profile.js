@@ -14,8 +14,9 @@ Router.use(express.json());
 Router.get("/getprofile",async (req,res)=>{           //changed
     const results=await req.user;
     
-    if(!results.username)
+    if(!results.username){
         res.json({message:"Unauthorized"});
+    }
     else if(results){
         let {username,name,age,gender,skill,dob,email,phone_number,about,city,state,country,education,ideas,profile_name}=await results;
 
@@ -30,7 +31,7 @@ Router.get("/getprofile",async (req,res)=>{           //changed
         catch(err){
             console.log(err);
         }
-            
+        console.log("here 3 :",name);
         res.json({username,name,age,gender,skill,dob,email,phone_number,about,city,state,country,education,ideas,profile_name});    
     }
 });

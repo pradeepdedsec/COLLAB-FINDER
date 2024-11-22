@@ -9,10 +9,10 @@ const db=require("../dbdata/data");
 Router.use(express.json());
 
 
-Router.get("/home",async (req,res)=>{
+Router.get("/server/home",async (req,res)=>{
     res.json({message:"hello, "+await req.user.name}); 
-});
-
+});  
+ 
 
 
 

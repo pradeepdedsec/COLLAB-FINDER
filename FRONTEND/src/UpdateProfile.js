@@ -36,13 +36,17 @@ const UpdateProfile = () => {
   };
 
   const handleSubmit = async () => {
+    if(!selectedFile)
+        return;
     const formData = new FormData();
     formData.append('image', selectedFile);
 
     try {
+      const cookie = localStorage.getItem('collab');
+      console.log(`${domain}/profilepic/upload/${username}`);
       const response = await axios.post(`${domain}/profilepic/upload/${username}`, formData, {
-        credentials:"include",
         headers: {
+          "Authorization":`Bearer ${cookie}`,
           'Content-Type': 'multipart/form-data'
         }
       });
@@ -56,13 +60,13 @@ const UpdateProfile = () => {
     console.log("first");
     const fetchData = async () => {
       try {
-
+        const cookie = localStorage.getItem('collab');
         const response = await fetch(
           domain+"/profile/getprofile",
           {
             method: "get",
-            credentials:"include",
             headers: {
+              "Authorization":`Bearer ${cookie}`,
               "Content-Type": "application/json",
             }
           }
@@ -131,11 +135,12 @@ const UpdateProfile = () => {
   }
 
   async function sendtest() {
-    handleSubmit();
+    
     if(name.length===0 || email.length===0){
       setMsg("Name and Email are requied feilds");
       return;
     }
+    await handleSubmit();
     if (name.length > 0) {
       let fskills = "";
 
@@ -199,12 +204,13 @@ const UpdateProfile = () => {
 
       console.log(t);
 
+      const cookie = localStorage.getItem('collab');
       const response = await fetch(
         domain+"/profile/updateProfile",
         {
           method: "post",
-          credentials:"include",
           headers: {
+            "Authorization":`Bearer ${cookie}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(t),

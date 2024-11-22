@@ -16,11 +16,11 @@ const Request = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/profile/getprofile",{
             method:"get",
-            credentials:"include",
                     headers:{
+                        "Authorization":`Bearer ${cookie}`,
                         "Content-Type":"application/json"
                     }
             });
@@ -46,10 +46,11 @@ const Request = () => {
                 return;
             }
 
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/teamrequest/upload",{
             method:"post",
-            credentials:"include",
                     headers:{
+                        "Authorization":`Bearer ${cookie}`,
                         "Content-Type":"application/json"
                     },
                     body:JSON.stringify({"skills":skills,"description":description})
@@ -72,7 +73,7 @@ const Request = () => {
     <Title />
     <div className='totalrequestbox'>
         <h1 style={{color:"rgb(83, 117, 226)",marginTop:"15px"}}>TEAM MEMBER REQUEST</h1>
-        <input id='teamuploadbox' type="text" value={skills} onChange={(e)=>setskills(e.target.value)}  placeholder='enter skills and separate with Comma( , )'/>
+        <input id='teamuploadbox' type="text" value={skills} onChange={(e)=>setskills(e.target.value)}  placeholder="Enter skills and separate with comma (e.g., Java, Python, React)"/>
         <textarea id='teamuploadarea' value={description} onChange={(e)=>setdes(e.target.value)} placeholder='Description'></textarea>
         <button id='uploadsubmitbtn' onClick={handlerequestsubmit}>Submit</button>
         <div>

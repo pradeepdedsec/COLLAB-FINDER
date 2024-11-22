@@ -15,10 +15,11 @@ const AdminSearch = () => {
   useEffect(() => {
     const fetchData = async () => {
       try{
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/admin/getallusers",{
           method:"get",
-          credentials:"include",
                   headers:{
+                      "Authorization":`Bearer ${cookie}`,
                       "Content-Type":"application/json"
                   }
           });
@@ -60,10 +61,11 @@ const AdminSearch = () => {
 
     console.log("username :"+searchbar);
       try{
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/admin/getuser/"+searchbar,{
           method:"get",
-          credentials:"include",
                   headers:{
+                      "Authorization":`Bearer ${cookie}`,
                       "Content-Type":"application/json"
                   }
           });
@@ -116,7 +118,7 @@ const AdminSearch = () => {
                                           <div className='detailbox'>
                                             <p>Name  : {e.name}</p>
                                             <p>Location  : {e.city},{e.state},{e.country}</p>
-                                            <p>Skills  : {e.skill}</p>
+                                            <p>Skills  : {e.skill.replaceAll(",",", ")}</p>
                                             <button className='openbtn' onClick={()=>handleopen(e.username)}>open</button>
                                           </div>
                                           </div>

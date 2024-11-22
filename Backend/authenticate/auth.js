@@ -4,6 +4,8 @@ const jwt=require("jsonwebtoken");
 const Router=express.Router();
 const nodemailer=require("nodemailer");
 const bodyParser=require("body-parser");
+const cookieParser = require("cookie-parser");
+const cors=require('cors');
 
 
 const mailprefix="Dear User, ";
@@ -17,8 +19,13 @@ const db=require("../dbdata/data");
 
 
 Router.use(express.json());
-
 Router.use(bodyParser.json());
+Router.use(cookieParser());
+
+Router.use(cors({
+    origin: ['https://deploy-test-react-snh6.onrender.com', 'http://127.0.0.1:3000', 'http://localhost:3000'],
+    credentials: true
+}));
 
 
 Router.post("/register/sendotp",async (req,res) =>{
@@ -139,21 +146,27 @@ Router.post("/register/verifyotp",async(req,res) =>{
 });
 
 
-Router.post("/login",async (req,res) =>{
+Router.post("/login", async (req, res) => {
+    const { username, password } = req.body;
 
-        const{username,password}=await req.body;
-
-        if(await req.exist===true){
-            const results=await req.user;
-            
-            if(await bcrypt.compare(password,results[0].password)){
-                const cookie=jwt.sign({"username":username},secretkey,{expiresIn:"100h"});
-                res.json({message:"Successfully Loggedin","cookie":cookie});
-            }
-            else
-                res.json({message:"Invalid Credentials"});  
+    // Check if user exists
+    if (req.exist === true) {  // Assuming `req.exist` is set elsewhere in middleware or the controller
+        const results = req.user; // Assuming `req.user` contains user data with a hashed password
+        
+        // Check password
+        const passwordMatch = await bcrypt.compare(password, results[0].password);
+        if (passwordMatch) {
+            // Create JWT token
+            const token = jwt.sign({ username: username }, secretkey, { expiresIn: "100h" });
+            res.json({ message: "Successfully Logged in", cookie: token });
+        } else {
+            // Invalid password
+            res.json({ message: "Invalid Credentials" });
         }
-        else if(await req.exist===false) res.json({message:"Invalid Credentials"});
+    } else {
+        // User does not exist
+        res.json({ message: "Invalid Credentials" });
+    }
 });
 
 Router.post("/forgotpassword/sendotp",async(req,res) =>{
@@ -165,12 +178,12 @@ Router.post("/forgotpassword/sendotp",async(req,res) =>{
                 host: "smtp.gmail.com",
                 port: 587,
                 auth: {
-                  user: 'pradeepdedsec@gmail.com',
-                  pass: 'cpkl oatl iqal mtqu',
+                    user: process.env.SERVER_EMAIL,
+                    pass: process.env.SERVER_PASSWORD,
               },
               });
               const mailOptions = {
-                from: 'pradeepdedsec@gmail.com',
+                from: process.env.SERVER_EMAIL,
                 to:  process.env.ADMIN_EMAIL,
                 subject: "COLLAB FINDER",
                 text: "Hello world ", 

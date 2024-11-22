@@ -15,14 +15,15 @@ const Feedback = () => {
 
 
     useEffect(() => {
+      
         const fetchData = async () => {
           try {
-
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/profile/getprofile",{
             method:"get",
-            credentials:"include",
                     headers:{
-                        "Content-Type":"application/json"
+                      'Authorization':`Bearer ${cookie}`,
+                      "Content-Type":"application/json"
                     }
             });
             const res=await response.json();
@@ -54,11 +55,12 @@ const Feedback = () => {
           return;
         }
         
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/feedback/feed",{
           method:"post",
-          credentials:"include",
                   headers:{
-                      "Content-Type":"application/json"
+                    'Authorization':`Bearer ${cookie}`,
+                    "Content-Type":"application/json"
                   },
                   body:JSON.stringify({"feedback":feed})
           });

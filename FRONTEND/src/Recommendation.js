@@ -7,6 +7,8 @@ import { domain } from "./Hostdata";
 
 const Recommendation = () => {
 
+
+  const [currentUser,setCurrentUser]=useState("");
   const [searchbar,setsearchbar]=useState("");
   const [isverified,setverified]=useState(false);
   const navigate=useNavigate();
@@ -14,6 +16,32 @@ const Recommendation = () => {
   const[userprofiles,setprofiles]=useState([]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const cookie = localStorage.getItem('collab');
+        const response=await fetch(domain+"/profile/getprofile",{
+        method:"get",
+                headers:{
+                    "Authorization":`Bearer ${cookie}`,
+                    "Content-Type":"application/json"
+                }
+        });
+        const res=await response.json();
+        if(await res.message==="Unauthorized"){
+            navigate("/Login");
+        }
+        else{
+          setCurrentUser(await res.username);
+        }
+      } catch (error) {
+            navigate("/Login");
+        console.error('Error fetching or parsing data:', error);
+      }
+    };
+
+    fetchData();
+
     Recommendskills();
   },[]);
 
@@ -24,10 +52,11 @@ const Recommendation = () => {
   async function Recommendskills(){
 
       try{
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/teamrequest/filter",{
           method:"get",
-          credentials:"include",
                   headers:{
+                      "Authorization":`Bearer ${cookie}`,
                       "Content-Type":"application/json"
                   }
           });
@@ -35,8 +64,6 @@ const Recommendation = () => {
           let res1=await res;
           setmemreq(res1);
           console.log("entered");
-          
-          console.log(JSON.parse(res1[0].skills));
       } 
       catch (error) {
         console.error('Error fetching or parsing data:', error);
@@ -48,10 +75,11 @@ const Recommendation = () => {
         return;
     console.log("skills :"+searchbar);
       try{
+        const cookie = localStorage.getItem('collab');
         const response=await fetch(domain+"/profile/getprofiles",{
           method:"get",
-          credentials:"include",
                   headers:{
+                      "Authorization":`Bearer ${cookie}`,
                       "Content-Type":"application/json"
                   },
                   body:JSON.stringify({"skills":searchbar})
@@ -92,8 +120,7 @@ const Recommendation = () => {
             </div>
             <div className='Rskillsboxforsearch'>
             {
-              memberreq.map((e,k) => 
-                                          <div className='Rprofilebox'>
+              memberreq.map((e,k) => {e.username !== currentUser?<div className='Rprofilebox'>
                                 
                                           <div className='Rdetailbox'>
                                             <p>Name  : {e.uploader}</p>
@@ -101,7 +128,8 @@ const Recommendation = () => {
                                             <p>Description  : {e.description}</p>
                                             <button className='Ropenbtn' onClick={()=>handleopen(e.uploader)}>view profile</button>
                                           </div>
-                                          </div>
+                                          </div>:<></>}
+                                          
                                       )
             }
             </div>

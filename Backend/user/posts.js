@@ -11,7 +11,7 @@ const db=require("../dbdata/data");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'posts/');
+    cb(null, './BACKEND/posts/');
   },
   filename: (req, file, cb) => {
     cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
@@ -59,9 +59,22 @@ Router.get('/get/:username', async(req, res) => {
   });
 });
 
+ 
+
+
 Router.delete('/delete/:name',async(req,res)=>{                           //changed
     const post_name =req.params.name;
   console.log("delete :"+post_name);
+  const filePath = path.join(__dirname, "../posts", post_name);
+
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error(`Error deleting file: ${err.message}`);
+        } else {
+            console.log(`File ${post_name} deleted successfully.`);
+        }
+    });
+    
     db.query(`delete from posts where post_name="${post_name}"`,async(err,res1)=>{
         if (err){
           console.log(err);

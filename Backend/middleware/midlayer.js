@@ -20,7 +20,7 @@ const getDetails =async (req,res,next) =>{
         }
 
 
-        if(await results.length===1){
+        if(await results?.length===1){
             console.log("one");
             req.user= await results;
             next();
@@ -36,7 +36,7 @@ const getDetails =async (req,res,next) =>{
 const isExist=async (req,res,next)=>{
 
         const results=await req.user;
-
+ 
 
         if(await results==="invalid"){ console.log("1");req.exist=false}
         else if(await results.length===1){ console.log("2");req.exist=true}

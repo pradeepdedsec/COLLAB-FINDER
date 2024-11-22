@@ -1,5 +1,5 @@
 import React, {useState ,useEffect} from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AdminNavBar from './AdminNavBar';
 import './AdminDisplayMsgs.css';
 import AdminTitle from './AdminTitle';
@@ -7,7 +7,6 @@ import { domain } from "../Hostdata";
 
 const AdminDisplayMsgs = () => {
 
-    const [feeds,setfeeds]=useState([]);
     const [userone,setuserone]=useState("");
     const [usertwo,setusertwo]=useState("");
     const [msg,setmsg]=useState("");
@@ -19,11 +18,11 @@ const AdminDisplayMsgs = () => {
         const fetchData = async () => {
             try {
     
-                
+                const cookie = localStorage.getItem('collab');
                 const response=await fetch(domain+"/admin/profile/getprofile",{
                 method:"get",
-                credentials:"include",
                         headers:{
+                            "Authorization":`Bearer ${cookie}`,
                             "Content-Type":"application/json"
                         }
                 });
@@ -52,11 +51,11 @@ const AdminDisplayMsgs = () => {
             console.log("entered");
 
             try {
-
+                const cookie = localStorage.getItem('collab');
                 const response=await fetch(`${domain}/admin/getchats/${userone}/${usertwo}`,{
                 method:"get",
-                credentials:"include",
                         headers:{
+                            "Authorization":`Bearer ${cookie}`,
                             "Content-Type":"application/json"
                         }
                 });
@@ -68,11 +67,14 @@ const AdminDisplayMsgs = () => {
                 }
                 setmsg(await res1.message);
                 if(await res1.message==="chats successfully retrieved"){
+                  if(res1.chats.length === 0)
+                    setmsg("No chats found");
+                  else
                     setchats(await res1.chats);
                 }
                 console.log("Success");
             } catch (error) {
-                console.error('Error fetching or parsing data:', error);
+                console.error('Error fetching or parsing data:', error); 
                 console.log("last");
                 //navigate("/AdminLogin");
             }

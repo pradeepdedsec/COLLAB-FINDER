@@ -36,6 +36,7 @@ const App =() =>{
     <Route path="/Register" element={<Register/>}/ >
     <Route path="/Forgotpassword" element={<Forgotpass/>}/ >
     <Route path="/Profile" element={<Profile/>}></Route>
+    <Route path="/Profile/:oldFile" element={<Profile/>}></Route>
     <Route path="/UpdateProfile" element={<UpdateProfile/>}/>
     <Route path="/Search" element={<Search/>}/>
     <Route path="/DisplayProfile/:uname" element={<DisplayProfile/>}/>
@@ -54,6 +55,8 @@ const App =() =>{
     <Route path="/AdminDisplayProfile/:uname" element={<AdminDisplayProfile/>}/>
     <Route path="/AdminFeedback" element={<AdminFeedback/>}/>
     <Route path="/AdminDisplayMsgs" element={<AdminDisplayMsgs/>}/>
+    <Route path='*' element={<Login/>} />
+
   </Routes>
   </>
 }

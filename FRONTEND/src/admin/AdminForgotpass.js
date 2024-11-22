@@ -18,10 +18,11 @@ const Adminforgotpass = () => {
             setMsg("passwords and confirm pass doesn't matching");
         }
         else{
-
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/auth/forgotpassword/verifyotp",{
                 method:"post",
                 headers:{
+                    "Authorization":`Bearer ${cookie}`,
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({"username":username,"otp":otp,"password":password})
@@ -40,9 +41,11 @@ const Adminforgotpass = () => {
         else{
             console.log(`${username}`);
             
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/auth/forgotpassword/sendotp",{
                 method:"post",
                 headers:{
+                    "Authorization":`Bearer ${cookie}`,
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({"username":username})

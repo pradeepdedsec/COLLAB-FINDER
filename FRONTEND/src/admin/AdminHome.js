@@ -14,11 +14,11 @@ const AdminHome = () => {
         const fetchData = async () => {
           try {
 
-            
+            const cookie = localStorage.getItem('collab');
             const response=await fetch(domain+"/admin/profile/getprofile",{
             method:"get",
-            credentials:"include",
                     headers:{
+                        "Authorization":`Bearer ${cookie}`,
                         "Content-Type":"application/json"
                     }
             });
